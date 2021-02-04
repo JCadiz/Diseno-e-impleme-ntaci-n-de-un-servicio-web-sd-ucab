@@ -149,3 +149,31 @@ $BODY$ LANGUAGE plpgsql;
 -- select UpdatePerson(2,'4268117', 'nely', 'barragan');
 
 
+-- Obtenere todas las escuelas
+CREATE OR REPLACE FUNCTION GetAllSchools( ) 
+RETURNS table (id INTEGER, nombre VARCHAR, descripcion VARCHAR, estatus VARCHAR,
+		creado TIMESTAMP, eliminado TIMESTAMP, facultad INTEGER)
+AS $BODY$
+BEGIN
+	RETURN QUERY
+        select * from school f where f.status = 'enabled';
+END;
+$BODY$ LANGUAGE plpgsql;
+
+-- select GetAllSchools();
+
+-- INSERT escuela
+CREATE OR REPLACE FUNCTION RegisterSchool(nomb varchar, descri varchar, facultad INTEGER) 
+    RETURNS table (id integer, nombre varchar, descripcion varchar, estatus varchar,
+		creado TIMESTAMP, eliminado TIMESTAMP, fk_facultad INTEGER)AS $BODY$
+BEGIN
+	
+	INSERT INTO SCHOOL (name, description, status, fk_faculty ) VALUES (nomb, descri, 'enabled', facultad);
+
+	RETURN QUERY
+          select * from school f WHERE f.name = nomb;
+END
+$BODY$ LANGUAGE plpgsql;
+
+-- select RegisterSchool('Escuela de Derecho', 'Derecho');
+
