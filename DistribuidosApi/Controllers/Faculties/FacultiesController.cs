@@ -56,56 +56,35 @@ namespace DistribuidosApi.Controllers.Faculties
 
         }
 
-        /*
-        //PUT api/faculties/{id}
-        [HttpPut("{id}")]
-        public ActionResult UpdateFaculty(int id, FacultyUpdateDTO facultyUpdateDTO)
+        //PUT api/faculties
+        [HttpPut]
+        public ActionResult<FacultyUpdateDTO> FacultyUpdate(FacultyUpdateDTO facu)
         {
             try
             {
-                var facultyModelFromRepo = _repo.GetFacultyById(id);
-                if (facultyModelFromRepo == null)
-                {
-                    return NotFound();
-                }
-
-                _mapper.Map(facultyUpdateDTO, facultyModelFromRepo);
-
-                _repo.UpdateFaculty(facultyModelFromRepo);
-
-                _repo.SaveChanges();
-
-                return NoContent();
+                return Ok(SqlFacultiesRepository.FacultyUpdate(facu.id, facu.name, facu.description));
             }
             catch (DatabaseException)
             {
                 return StatusCode(500);
             }
+
         }
 
-        //DELETE api/faculties/{id}
-        [HttpDelete("{id}")]
-        public ActionResult FacultyDelete(int id)
+        //PUT api/faculties
+        [HttpDelete]
+        public ActionResult<FacultyCreateDTO> FacultyDelete(FacultyUpdateDTO facu)
         {
             try
             {
-                var facultyModelFromRepo = _repo.GetFacultyById(id);
-                if (facultyModelFromRepo == null)
-                {
-                    return NotFound();
-                }
-
-                _repo.DeleteFaculty(facultyModelFromRepo);
-                _repo.SaveChanges();
-
-                return NoContent();
+                return Ok(SqlFacultiesRepository.FacultyDelete(facu.id));
             }
             catch (DatabaseException)
             {
                 return StatusCode(500);
             }
 
-        } */
+        }
 
 
     }
