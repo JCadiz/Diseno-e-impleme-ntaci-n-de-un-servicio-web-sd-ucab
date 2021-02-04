@@ -11,5 +11,5 @@ INSERT INTO PERSON (dni, first_name, last_name, status) VALUES ('24663590','Fran
 INSERT INTO SECTION (uc, semester, ht, hp, hl, name, description, status, type, fk_school) VALUES (5, 4, 2, 2, 1, 'Sistemas Distribuidos', 'Sección de Sistemas Distribuidos', 'enabled', 'mandatory', 1);
 INSERT INTO SECTION (uc, semester, ht, hp, hl, name, description, status, type, fk_school) VALUES (8, 7, 3, 3, 2, 'Materiales dentales', 'Sección de Materiales dentales', 'enabled', 'elective', 2);
 
-INSERT INTO PERSON (status, type, fk_person, fk_section) VALUES ('enabled','student', 1, 1);
-INSERT INTO PERSON (status, type, fk_person, fk_section) VALUES ('enabled','teacher', 2, 1);
+INSERT INTO ENROLLMENT (status, type, fk_person, fk_section) VALUES ('enabled','student', 1, 1);
+INSERT INTO ENROLLMENT (status, type, fk_person, fk_section) VALUES ('enabled','teacher', 2, 1);
