@@ -56,26 +56,13 @@ namespace DistribuidosApi.Controllers.Schools
 
         }
 
-        /*
-        //PUT api/schools/{id}
-        [HttpPut("{id}")]
-        public ActionResult UpdateSchool(int id, SchoolUpdateDTO schoolUpdateDTO)
+        //PUT api/schools
+        [HttpPut]
+        public ActionResult<SchoolUpdateDTO> SchoolUpdate(SchoolUpdateDTO escu)
         {
             try
             {
-                var schoolModelFromRepo = _repo.GetSchoolById(id);
-                if (schoolModelFromRepo == null)
-                {
-                    return NotFound();
-                }
-
-                _mapper.Map(schoolUpdateDTO, schoolModelFromRepo);
-
-                _repo.UpdateSchool(schoolModelFromRepo);
-
-                _repo.SaveChanges();
-
-                return NoContent();
+                return Ok(SqlSchoolsRepository.SchoolUpdate(escu.id, escu.name, escu.description, escu.fk_faculty));
             }
             catch (DatabaseException)
             {
@@ -83,30 +70,20 @@ namespace DistribuidosApi.Controllers.Schools
             }
         }
 
-        //DELETE api/schools/{id}
-        [HttpDelete("{id}")]
-        public ActionResult SchoolDelete(int id)
+        //PUT api/schools
+        [HttpDelete]
+        public ActionResult<SchoolCreateDTO> SchoolDelete(SchoolUpdateDTO escu)
         {
             try
             {
-                var schoolModelFromRepo = _repo.GetSchoolById(id);
-                if (schoolModelFromRepo == null)
-                {
-                    return NotFound();
-                }
-
-                _repo.DeleteSchool(schoolModelFromRepo);
-                _repo.SaveChanges();
-
-                return NoContent();
+                return Ok(SqlSchoolsRepository.SchoolDelete(escu.id));
             }
             catch (DatabaseException)
             {
                 return StatusCode(500);
             }
 
-        } */
-
+        }
 
     }
 }
