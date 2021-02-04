@@ -43,3 +43,32 @@ AS $$
     where id = id_enrollment;
 $$;
 
+-- obtengo las operaciones de un usuario por un rango de fecha
+CREATE OR REPLACE FUNCTION GetAllFaculties( ) 
+RETURNS table (id integer, nombre varchar, descripcion varchar, estatus varchar,
+		creado TIMESTAMP, eliminado TIMESTAMP)
+AS $BODY$
+BEGIN
+	RETURN QUERY
+        select * from faculty f where f.status = 'enabled';
+END;
+$BODY$ LANGUAGE plpgsql;
+
+-- select GetAllFaculties();
+
+-- INSERT MANUAL
+CREATE OR REPLACE FUNCTION RegisterFaculty(nomb varchar, descri varchar) 
+    RETURNS table (id integer, nombre varchar, descripcion varchar, estatus varchar,
+		creado TIMESTAMP, eliminado TIMESTAMP)AS $BODY$
+BEGIN
+	
+	INSERT INTO FACULTY (name, description, status ) VALUES (nomb, descri, 'enabled');
+
+	RETURN QUERY
+          select * from faculty f WHERE f.name = nomb;
+END
+$BODY$ LANGUAGE plpgsql;
+
+-- select RegisterFaculty('Facultad de Humanidades', 'Humanidades');
+
+
