@@ -37,13 +37,50 @@ namespace DistribuidosApi.Data.Repository.Faculties
             return FacultiesList;
         }
 
-        public void DeleteFaculty(Faculty bash)
+        public static List<Faculty> FacultyUpdate(int ida, string nomb, string des)
         {
-            if (bash == null)
+            var FacultiesList = new List<Faculty>();
+
+            var table = GeneralContext.Instance.ExecuteFunction("UpdateFaculty(@id_facult, @nomb, @descri)",
+            ida, nomb, des);
+
+            for (var i = 0; i < table.Rows.Count; i++)
             {
-                throw new ArgumentNullException(nameof(bash));
-            }
-            _context.faculty.Remove(bash);
+                var id = Convert.ToInt32(table.Rows[i][0]);
+                var nombre = table.Rows[i][1].ToString();
+                var descripcion = table.Rows[i][2].ToString();
+                var estatus = table.Rows[i][3].ToString();
+                var creado = Convert.ToDateTime(table.Rows[i][4]);
+
+                var facultad = new Faculty(id, nombre, descripcion, estatus, creado);
+                FacultiesList.Add(facultad);
+            };
+
+
+            return FacultiesList;
+        }
+
+        public static List<Faculty> FacultyDelete(int ida)
+        {
+            var FacultiesList = new List<Faculty>();
+
+            var table = GeneralContext.Instance.ExecuteFunction("DeleteFaculty(@id_faculty)",
+            ida);
+
+            for (var i = 0; i < table.Rows.Count; i++)
+            {
+                var id = Convert.ToInt32(table.Rows[i][0]);
+                var nombre = table.Rows[i][1].ToString();
+                var descripcion = table.Rows[i][2].ToString();
+                var estatus = table.Rows[i][3].ToString();
+                var creado = Convert.ToDateTime(table.Rows[i][4]);
+
+                var facultad = new Faculty(id, nombre, descripcion, estatus, creado);
+                FacultiesList.Add(facultad);
+            };
+
+
+            return FacultiesList;
         }
         
         public static List<Faculty> GetAllFaculties()
@@ -71,9 +108,6 @@ namespace DistribuidosApi.Data.Repository.Faculties
             return (_context.SaveChanges() >= 0);
         }
 
-        public void UpdateFaculty(Faculty bash)
-        {
-
-        }
+        
     }
 }

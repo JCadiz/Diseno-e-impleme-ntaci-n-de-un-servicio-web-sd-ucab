@@ -1,47 +1,61 @@
--- Delete Faculty
-CREATE OR REPLACE PROCEDURE DeleteFaculty(id_faculty INTEGER)
-LANGUAGE SQL
-AS $$
+CREATE OR REPLACE FUNCTION DeleteFaculty(id_faculty INTEGER) RETURNS 
+    table (id integer, nombre varchar, descripcion varchar, estatus varchar,
+		creado TIMESTAMP, eliminado TIMESTAMP)AS $BODY$
+BEGIN
     update faculty
     set status = 'disabled', deleted_date = CURRENT_TIMESTAMP
-    where id = id_faculty;
-$$;
+    where faculty.id = id_faculty;
+
+    RETURN QUERY
+        select * from faculty f WHERE f.id = id_faculty;
+END
+$BODY$ LANGUAGE plpgsql;
 
 -- Delete School
-CREATE OR REPLACE PROCEDURE DeleteSchool(id_school INTEGER)
-LANGUAGE SQL
-AS $$
+CREATE OR REPLACE FUNCTION DeleteSchool(id_school INTEGER)  RETURNS INTEGER AS $$
+BEGIN
     update school
     set status = 'disabled', deleted_date = CURRENT_TIMESTAMP
-    where id = id_school;
-$$;
+    where school.id = id_school;
+
+    return id_school;
+END
+$$ LANGUAGE plpgsql;
 
 -- Delete Person
-CREATE OR REPLACE PROCEDURE DeletePerson(id_person INTEGER)
-LANGUAGE SQL
-AS $$
+CREATE OR REPLACE FUNCTION DeletePerson(id_person INTEGER)  RETURNS INTEGER AS $$
+BEGIN
     update person
     set status = 'disabled', deleted_date = CURRENT_TIMESTAMP
-    where id = id_person;
-$$;
+    where person.id = id_person;
+
+    return id_school;
+END
+$$ LANGUAGE plpgsql;
+
 
 -- Delete Section
-CREATE OR REPLACE PROCEDURE DeleteSection(id_section INTEGER)
-LANGUAGE SQL
-AS $$
+CREATE OR REPLACE FUNCTION DeleteSection(id_section INTEGER)  RETURNS INTEGER AS $$
+BEGIN
     update section
     set status = 'disabled', deleted_date = CURRENT_TIMESTAMP
-    where id = id_section;
-$$;
+    where section.id = id_section;
+
+    return id_school;
+END
+$$ LANGUAGE plpgsql;
 
 -- Delete Enrollment
-CREATE OR REPLACE PROCEDURE DeleteEnrollment(id_enrollment INTEGER)
-LANGUAGE SQL
-AS $$
+CREATE OR REPLACE FUNCTION DeleteEnrollment(id_enrollment INTEGER)  RETURNS INTEGER AS $$
+BEGIN
     update enrollment
     set status = 'disabled', deleted_date = CURRENT_TIMESTAMP
-    where id = id_enrollment;
-$$;
+    where enrollment.id = id_enrollment;
+
+    return id_school;
+END
+$$ LANGUAGE plpgsql;
+
 
 -- obtengo las operaciones de un usuario por un rango de fecha
 CREATE OR REPLACE FUNCTION GetAllFaculties( ) 
@@ -70,6 +84,22 @@ END
 $BODY$ LANGUAGE plpgsql;
 
 -- select RegisterFaculty('Facultad de Humanidades', 'Humanidades');
+
+-- update manual faculty
+CREATE OR REPLACE FUNCTION UpdateFaculty(id_facult int, nomb varchar, descri varchar) 
+    RETURNS table (id integer, nombre varchar, descripcion varchar, estatus varchar,
+		creado TIMESTAMP, eliminado TIMESTAMP)AS $BODY$
+BEGIN
+	
+	update faculty set name = nomb, description = descri
+    where faculty.id = id_facult;
+
+	RETURN QUERY
+          select * from faculty f WHERE f.id = id_facult;
+END
+$BODY$ LANGUAGE plpgsql;
+
+-- select UpdateFaculty(4,'Facultad de ciencias', 'ciencias');
 
 
 -- Obtenere todas las escuelas
