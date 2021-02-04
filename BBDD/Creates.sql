@@ -6,7 +6,7 @@ CREATE TABLE PERSON
     last_name VARCHAR(100) NOT NULL,
     status VARCHAR(100) NOT NULL,
     created_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    deleted_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    deleted_date TIMESTAMP WITHOUT TIME ZONE,
     CONSTRAINT pk_person PRIMARY KEY(id),
     CONSTRAINT type_person_status CHECK(status IN('enabled','disabled'))
 );
@@ -18,7 +18,7 @@ CREATE TABLE FACULTY
     description VARCHAR(100) NOT NULL,
     status VARCHAR(100) NOT NULL,
     created_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    deleted_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    deleted_date TIMESTAMP WITHOUT TIME ZONE,
     CONSTRAINT pk_faculty PRIMARY KEY(id),
     CONSTRAINT type_faculty_status CHECK(status IN('enabled','disabled'))
 );
@@ -30,7 +30,7 @@ CREATE TABLE SCHOOL
     description VARCHAR(100) NOT NULL,
     status VARCHAR(100) NOT NULL,
     created_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    deleted_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    deleted_date TIMESTAMP WITHOUT TIME ZONE,
     fk_faculty INT,
     CONSTRAINT pk_school PRIMARY KEY(id),
     CONSTRAINT type_school_status CHECK(status IN('enabled','disabled')),
@@ -50,7 +50,7 @@ CREATE TABLE SECTION
     status VARCHAR(100) NOT NULL,
     type VARCHAR(100) NOT NULL,
     created_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    deleted_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    deleted_date TIMESTAMP WITHOUT TIME ZONE,
     fk_school INT,
     CONSTRAINT pk_section PRIMARY KEY(id),
     CONSTRAINT type_signature CHECK (type IN('mandatory','elective')),
@@ -62,12 +62,14 @@ CREATE TABLE ENROLLMENT
 (
     id SERIAL UNIQUE,
     status VARCHAR(100) NOT NULL,
+    type VARCHAR(100) NOT NULL,
     created_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    deleted_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    deleted_date TIMESTAMP WITHOUT TIME ZONE,
     fk_person INT,
     fk_section INT,
     CONSTRAINT pk_enrollment PRIMARY KEY(id),
     CONSTRAINT type_enrollment_status CHECK(status IN('enabled','disabled')),
     CONSTRAINT fk_enrollment_person FOREIGN KEY(fk_person) REFERENCES person (id),
-    CONSTRAINT fk_enrollment_section FOREIGN KEY(fk_section) REFERENCES section (id)
+    CONSTRAINT fk_enrollment_section FOREIGN KEY(fk_section) REFERENCES section (id),
+    CONSTRAINT type_enrollment CHECK (type IN('student','teacher'))
 );
