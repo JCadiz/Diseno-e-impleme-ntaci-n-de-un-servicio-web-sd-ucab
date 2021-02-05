@@ -11,16 +11,19 @@ BEGIN
 END
 $BODY$ LANGUAGE plpgsql;
 
--- Delete School
-CREATE OR REPLACE FUNCTION DeleteSchool(id_school INTEGER)  RETURNS INTEGER AS $$
+-- delete school
+CREATE OR REPLACE FUNCTION DeleteSchool(id_school INTEGER) RETURNS 
+    table (id integer, nombre varchar, descripcion varchar, estatus varchar,
+		creado TIMESTAMP, eliminado TIMESTAMP, facultad INTEGER)AS $BODY$
 BEGIN
     update school
     set status = 'disabled', deleted_date = CURRENT_TIMESTAMP
     where school.id = id_school;
 
-    return id_school;
+    RETURN QUERY
+        select * from school s WHERE s.id = id_school;
 END
-$$ LANGUAGE plpgsql;
+$BODY$ LANGUAGE plpgsql;
 
 -- Delete Person
 CREATE OR REPLACE FUNCTION DeletePerson(id_person INTEGER) 
@@ -189,3 +192,15 @@ END;
 $BODY$ LANGUAGE plpgsql;
 
 -- select GetAllSections();
+-- UPDATE escuela
+CREATE OR REPLACE FUNCTION UpdateSchool(id_school INTEGER, nomb varchar, descri varchar, facultad INTEGER) 
+    RETURNS table (id_s integer, nombre varchar, descripcion varchar, estatus varchar,
+		creado TIMESTAMP, eliminado TIMESTAMP, fk_facultad INTEGER)AS $BODY$
+BEGIN
+	
+	UPDATE school s set name = nomb, description = descri, fk_faculty = Facultad WHERE s.id = id_school;
+
+	RETURN QUERY
+          select * from school s WHERE s.id = id_school;
+END
+$BODY$ LANGUAGE plpgsql;
