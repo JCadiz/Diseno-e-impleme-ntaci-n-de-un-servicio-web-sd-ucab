@@ -177,3 +177,15 @@ $BODY$ LANGUAGE plpgsql;
 
 -- select RegisterSchool('Escuela de Derecho', 'Derecho');
 
+-- obtengo las operaciones de un sections 
+CREATE OR REPLACE FUNCTION GetAllSections( ) 
+RETURNS table (id integer, ucc integer, semes integer, htt numeric, hpp numeric, hll numeric, nombre varchar, 
+        descripcion varchar, estatus varchar, tipo varchar, creado TIMESTAMP, eliminado TIMESTAMP, fk_s integer)
+AS $BODY$
+BEGIN
+	RETURN QUERY
+        select * from section s where s.status = 'enabled';
+END;
+$BODY$ LANGUAGE plpgsql;
+
+-- select GetAllSections();

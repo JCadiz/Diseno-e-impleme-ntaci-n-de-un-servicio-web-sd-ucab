@@ -7,7 +7,6 @@ namespace DistribuidosApi.Data.Repository.Faculties
 {
     public class SqlFacultiesRepository
     {
-        //private readonly CommerceContext _context;
         private readonly GeneralContext _context;
         public SqlFacultiesRepository(GeneralContext context)
         {
