@@ -204,3 +204,25 @@ BEGIN
           select * from school s WHERE s.id = id_school;
 END
 $BODY$ LANGUAGE plpgsql;
+
+-- Obtener todos los profesores de una seccion
+CREATE OR REPLACE FUNCTION GetAllTeachersFromSection( id_section INTEGER ) 
+RETURNS table (id integer, dni varchar, nombre varchar, apellido varchar, estatus varchar,
+		creado TIMESTAMP, eliminado TIMESTAMP)
+AS $BODY$
+BEGIN
+	RETURN QUERY
+        SELECT PE.* FROM person AS PE, enrollment AS EN WHERE PE.id = EN.fk_person AND EN.fk_section = id_section AND EN.type = 'teacher' AND EN.status = 'enabled';
+END;
+$BODY$ LANGUAGE plpgsql;
+
+-- Obtener todos los estudiantes de una seccion
+CREATE OR REPLACE FUNCTION GetAllStudentsFromSection( id_section INTEGER ) 
+RETURNS table (id integer, dni varchar, nombre varchar, apellido varchar, estatus varchar,
+		creado TIMESTAMP, eliminado TIMESTAMP)
+AS $BODY$
+BEGIN
+	RETURN QUERY
+        SELECT PE.* FROM person AS PE, enrollment AS EN WHERE PE.id = EN.fk_person AND EN.fk_section = id_section AND EN.type = 'student' AND EN.status = 'enabled';
+END;
+$BODY$ LANGUAGE plpgsql;
