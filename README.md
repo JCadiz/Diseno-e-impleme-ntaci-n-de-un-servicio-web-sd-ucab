@@ -3,6 +3,7 @@
 ### Tecnologías
 - .NET Core v3.1 -> Requiere tener instalado el SDK (https://dotnet.microsoft.com/download)
 - PostgreSQL v12
+- Es requerido el Driver de PostgreSQL -> Npgsql
 
 ### Clonar el Proyecto 
 - `https://github.com/zaidcodes/Diseno-e-impleme-ntaci-n-de-un-servicio-web-sd-ucab.git`
