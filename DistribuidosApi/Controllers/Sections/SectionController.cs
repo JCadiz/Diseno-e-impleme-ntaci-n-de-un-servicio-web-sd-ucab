@@ -86,6 +86,34 @@ namespace DistribuidosApi.Controllers.Sections
 
         }
 
+        //PUT api/sections/1/teachers
+        [HttpGet("{id_section}/teachers", Name = "SectionTeachers")]
+        public ActionResult<SectionCreateDTO> SectionTeachers(int id_section)
+        {
+            try
+            {
+                return Ok(SqlSectionsRepository.GetAllTeachers(id_section));
+            }
+            catch (DatabaseException)
+            {
+                return StatusCode(500);
+            }
+
+        }
+
+        //PUT api/sections/1/students
+        [HttpGet("{id_section}/students", Name = "SectionStudents")]
+        public ActionResult<SectionCreateDTO> SectionStudents(int id_section)
+        {
+            try
+            {
+                return Ok(SqlSectionsRepository.GetAllStudents(id_section));
+            }
+            catch (DatabaseException)
+            {
+                return StatusCode(500);
+            }
+        }
 
     }
 }
