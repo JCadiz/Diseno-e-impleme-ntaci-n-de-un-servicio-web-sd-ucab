@@ -205,6 +205,29 @@ namespace DistribuidosApi.Data.Repository.Sections
             return inscriptionList;
         }
 
+        public static List<Uninscription> SectionUninscription(int id_section, int id_person)
+        {
+            var uninscriptionList = new List<Uninscription>();
+
+            var table = GeneralContext.Instance.ExecuteFunction("Uninscription(@id_section, @id_person)", id_section, id_person);
+
+            for (var i = 0; i < table.Rows.Count; i++)
+            {
+
+
+                var id = Convert.ToInt32(table.Rows[i][0]);
+                var status = table.Rows[i][1].ToString();
+                var type = table.Rows[i][2].ToString();
+                var created_date = Convert.ToDateTime(table.Rows[i][3]);
+                var deleted_date = Convert.ToDateTime(table.Rows[i][4]);
+
+                var unis = new Uninscription(id, status, type, created_date, deleted_date, id_section, id_person);
+                uninscriptionList.Add(unis);
+            };
+
+            return uninscriptionList;
+        }
+
         public bool SaveChanges()
         {
             return (_context.SaveChanges() >= 0);

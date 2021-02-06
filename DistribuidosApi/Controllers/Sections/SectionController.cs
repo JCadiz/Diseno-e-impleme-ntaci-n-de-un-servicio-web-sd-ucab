@@ -129,5 +129,19 @@ namespace DistribuidosApi.Controllers.Sections
             }
         }
 
+        //POST api/sections/1/inscription
+        [HttpDelete("{id_section}/inscription", Name = "SectionInscription")]
+        public ActionResult<InscriptionDTO> SectionUninscription(int id_section, InscriptionDTO ins)
+        {
+            try
+            {
+                return Ok(SqlSectionsRepository.SectionUninscription(id_section, ins.id_person));
+            }
+            catch (DatabaseException)
+            {
+                return StatusCode(500);
+            }
+        }
+
     }
 }
