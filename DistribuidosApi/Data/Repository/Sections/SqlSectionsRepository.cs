@@ -2,6 +2,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System;
 using DistribuidosApi.Models.Sections;
+using DistribuidosApi.Models.Persons;
 
 namespace DistribuidosApi.Data.Repository.Sections
 {
@@ -134,6 +135,50 @@ namespace DistribuidosApi.Data.Repository.Sections
             };
 
             return SectionsList;
+        }
+
+        public static List<Person> GetAllTeachers(int id_section)
+        {
+            var PersonsList = new List<Person>();
+
+            var table = GeneralContext.Instance.ExecuteFunction("GetAllTeachersFromSection(@id_section)", id_section);
+
+            for (var i = 0; i < table.Rows.Count; i++)
+            {
+                var id = Convert.ToInt32(table.Rows[i][0]);
+                var cd = table.Rows[i][1].ToString();
+                var nombre = table.Rows[i][2].ToString();
+                var ape = table.Rows[i][3].ToString();
+                var estatus = table.Rows[i][4].ToString();
+                var creado = Convert.ToDateTime(table.Rows[i][5]);
+
+                var person = new Person(id, cd, nombre, ape, estatus, creado);
+                PersonsList.Add(person);
+            };
+
+            return PersonsList;
+        }
+
+        public static List<Person> GetAllStudents(int id_section)
+        {
+            var PersonsList = new List<Person>();
+
+            var table = GeneralContext.Instance.ExecuteFunction("GetAllStudentsFromSection(@id_section)", id_section);
+
+            for (var i = 0; i < table.Rows.Count; i++)
+            {
+                var id = Convert.ToInt32(table.Rows[i][0]);
+                var cd = table.Rows[i][1].ToString();
+                var nombre = table.Rows[i][2].ToString();
+                var ape = table.Rows[i][3].ToString();
+                var estatus = table.Rows[i][4].ToString();
+                var creado = Convert.ToDateTime(table.Rows[i][5]);
+
+                var person = new Person(id, cd, nombre, ape, estatus, creado);
+                PersonsList.Add(person);
+            };
+
+            return PersonsList;
         }
         public bool SaveChanges()
         {
