@@ -86,7 +86,7 @@ namespace DistribuidosApi.Controllers.Sections
 
         }
 
-        //PUT api/sections/1/teachers
+        //GET api/sections/1/teachers
         [HttpGet("{id_section}/teachers", Name = "SectionTeachers")]
         public ActionResult<SectionCreateDTO> SectionTeachers(int id_section)
         {
@@ -101,7 +101,7 @@ namespace DistribuidosApi.Controllers.Sections
 
         }
 
-        //PUT api/sections/1/students
+        //GET api/sections/1/students
         [HttpGet("{id_section}/students", Name = "SectionStudents")]
         public ActionResult<SectionCreateDTO> SectionStudents(int id_section)
         {

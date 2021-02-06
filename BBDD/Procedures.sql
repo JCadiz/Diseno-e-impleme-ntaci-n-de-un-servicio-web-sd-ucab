@@ -43,15 +43,19 @@ $BODY$ LANGUAGE plpgsql;
 
 
 -- Delete Section
-CREATE OR REPLACE FUNCTION DeleteSection(id_section INTEGER)  RETURNS INTEGER AS $$
+CREATE OR REPLACE FUNCTION DeleteSection(id_section INTEGER) 
+RETURNS table (id integer, ucc integer, semes integer, htt numeric, hpp numeric, hll numeric, nombre varchar, 
+        descripcion varchar, estatus varchar, tipo varchar, creado TIMESTAMP, eliminado TIMESTAMP, fk_school integer)
+AS $BODY$
 BEGIN
     update section
     set status = 'disabled', deleted_date = CURRENT_TIMESTAMP
     where section.id = id_section;
 
-    return id_school;
+    RETURN QUERY
+        select * from section s WHERE s.id = id_section;
 END
-$$ LANGUAGE plpgsql;
+$BODY$ LANGUAGE plpgsql;
 
 -- Delete Enrollment
 CREATE OR REPLACE FUNCTION DeleteEnrollment(id_enrollment INTEGER)  RETURNS INTEGER AS $$
@@ -180,18 +184,6 @@ $BODY$ LANGUAGE plpgsql;
 
 -- select RegisterSchool('Escuela de Derecho', 'Derecho');
 
--- obtengo las operaciones de un sections 
-CREATE OR REPLACE FUNCTION GetAllSections( ) 
-RETURNS table (id integer, ucc integer, semes integer, htt numeric, hpp numeric, hll numeric, nombre varchar, 
-        descripcion varchar, estatus varchar, tipo varchar, creado TIMESTAMP, eliminado TIMESTAMP, fk_s integer)
-AS $BODY$
-BEGIN
-	RETURN QUERY
-        select * from section s where s.status = 'enabled';
-END;
-$BODY$ LANGUAGE plpgsql;
-
--- select GetAllSections();
 -- UPDATE escuela
 CREATE OR REPLACE FUNCTION UpdateSchool(id_school INTEGER, nomb varchar, descri varchar, facultad INTEGER) 
     RETURNS table (id_s integer, nombre varchar, descripcion varchar, estatus varchar,
@@ -226,3 +218,49 @@ BEGIN
         SELECT PE.* FROM person AS PE, enrollment AS EN WHERE PE.id = EN.fk_person AND EN.fk_section = id_section AND EN.type = 'student' AND EN.status = 'enabled';
 END;
 $BODY$ LANGUAGE plpgsql;
+
+-- obtengo las operaciones de un sections 
+CREATE OR REPLACE FUNCTION GetAllSections( ) 
+RETURNS table (id integer, ucc integer, semes integer, htt numeric, hpp numeric, hll numeric, nombre varchar, 
+        descripcion varchar, estatus varchar, tipo varchar, creado TIMESTAMP, eliminado TIMESTAMP, fk_s integer)
+AS $BODY$
+BEGIN
+	RETURN QUERY
+        select * from section s where s.status = 'enabled';
+END;
+$BODY$ LANGUAGE plpgsql;
+
+-- select GetAllSections();
+
+-- INSERT MANUAL
+CREATE OR REPLACE FUNCTION RegisterSection(u integer, semes integer , htt float, hpp float, hll float, nomb varchar, descri varchar, ty varchar, fk integer) 
+    RETURNS table (id integer, ucc integer, semest integer, htt2 numeric, hpp2 numeric, hll2 numeric, nombre varchar, 
+        descripcion varchar, estatus varchar, tipo varchar, creado TIMESTAMP, eliminado TIMESTAMP, fk_s integer)AS $BODY$
+BEGIN
+	
+	INSERT INTO section (uc, semester, ht, hp, hl, name, description, status, type, fk_school) 
+        VALUES (u, semes, htt, hpp, hll, nomb, descri,'enabled', ty, fk);
+
+	RETURN QUERY
+          select * from section s order by id desc limit 1;
+END
+$BODY$ LANGUAGE plpgsql;
+
+-- select RegisterSection(7, 6, 5.00, 4.00, 3.00, 'Redes 3', 'Redes de Computadoras', 'mandatory', 1);
+
+-- Actualizar los campos de una section 
+CREATE OR REPLACE FUNCTION UpdateSection(id_section integer, uc2 integer, semest2 integer, htt2 float, hpp2 float, hll2 float, nombre2 varchar, descripcion2 varchar, tipo2 varchar, fk2 integer) 
+RETURNS table (id integer, ucc integer, semes integer, htt numeric, hpp numeric, hll numeric, nombre varchar, 
+        descripcion varchar, estatus varchar, tipo varchar, creado TIMESTAMP, eliminado TIMESTAMP, fk_school integer)
+AS $BODY$
+BEGIN
+    UPDATE section s set uc = uc2, semester = semest2 , ht = htt2 , hp = hpp2 , hl = hll2 , name = nombre2 , description = descripcion2, type = tipo2, fk_school = fk2 WHERE s.id = id_section;
+
+    RETURN QUERY
+        select * 
+        from section s 
+        where s.status = 'enabled' 
+        AND s.id = id_section;
+END;
+$BODY$ LANGUAGE plpgsql;
+-- select UpdateSection(1,5,5,4,2,2,'Sist. Dist.', 'Materia sistemas distribuidos', 'mandatory',1);

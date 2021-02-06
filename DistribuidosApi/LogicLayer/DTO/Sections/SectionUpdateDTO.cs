@@ -9,11 +9,11 @@ namespace DistribuidosApi.LogicLayer.DTO.Sections
 
         public int semester { get; set; }
 
-        public double ht { get; set; }
+        public float ht { get; set; }
 
-        public double hp { get; set; }
+        public float hp { get; set; }
 
-        public double hl { get; set; }
+        public float hl { get; set; }
 
         public string name { get; set; }
 

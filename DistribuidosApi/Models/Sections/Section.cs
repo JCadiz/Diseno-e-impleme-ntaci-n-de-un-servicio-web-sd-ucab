@@ -17,13 +17,10 @@ namespace DistribuidosApi.Models.Sections
         [Required]
         public int semester { get; set; }
 
-        [Required]
         public double ht { get; set; }
 
-        [Required]
         public double hp { get; set; }
 
-        [Required]
         public double hl { get; set; }
 
         public string name { get; set; }

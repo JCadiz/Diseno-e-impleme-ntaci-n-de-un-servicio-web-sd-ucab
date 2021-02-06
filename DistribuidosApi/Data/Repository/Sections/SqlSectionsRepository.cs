@@ -14,13 +14,13 @@ namespace DistribuidosApi.Data.Repository.Sections
             _context = context;
         }
 
-        public static List<Section> SectionRegister(int u, int semes, double ht, double hp, double hl,
+        public static List<Section> SectionRegister(int u, int semes, float ht, float hp, float hl,
         string nomb, string des, string ty, int fk)
         {
             var SectionsList = new List<Section>();
 
-            var table = GeneralContext.Instance.ExecuteFunction("RegisterSection(@u, @semes, @ht, @hp, @hl, @nomb, @descri, @ty, @fk)",
-            u, semes, ht, hp, hl, nomb, des, ty, fk);
+            var table = GeneralContext.Instance.ExecuteFunction("RegisterSection(@u, @semes, @htt, @hpp, @hll, @nomb, @descri, @ty, @fk)",
+            u, semes, Convert.ToDouble(ht), Convert.ToDouble(hp), Convert.ToDouble(hl), nomb, des, ty, fk);
 
             for (var i = 0; i < table.Rows.Count; i++)
             {
@@ -42,17 +42,16 @@ namespace DistribuidosApi.Data.Repository.Sections
                 SectionsList.Add(Section);
             };
 
-
             return SectionsList;
         }
 
-        public static List<Section> SectionUpdate(int ida, int u, int semes, double ht, double hp, double hl,
+        public static List<Section> SectionUpdate(int ida, int u, int semes, float ht, float hp, float hl,
         string nomb, string des, string ty, int fk)
         {
             var SectionsList = new List<Section>();
 
-            var table = GeneralContext.Instance.ExecuteFunction("UpdateSection(@id_section, @u, @semes, @ht, @hp, @hl, @nomb, @descri, @ty, @fk)",
-            ida, nomb, des);
+            var table = GeneralContext.Instance.ExecuteFunction("UpdateSection(@id_section, @uc2, @semes2, @ht2, @hp2, @hl2, @nomb2, @descri2, @ty2, @fk2)",
+            ida, u, semes, Convert.ToDouble(ht), Convert.ToDouble(hp), Convert.ToDouble(hl), nomb, des, ty, fk);
 
             for (var i = 0; i < table.Rows.Count; i++)
             {
