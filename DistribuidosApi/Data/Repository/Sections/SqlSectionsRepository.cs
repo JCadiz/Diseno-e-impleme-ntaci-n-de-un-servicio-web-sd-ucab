@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System;
 using DistribuidosApi.Models.Sections;
 using DistribuidosApi.Models.Persons;
+using DistribuidosApi.Models.Message;
+using DistribuidosApi.LogicLayer.DTO.Sections;
 
 namespace DistribuidosApi.Data.Repository.Sections
 {
@@ -179,6 +181,30 @@ namespace DistribuidosApi.Data.Repository.Sections
 
             return PersonsList;
         }
+
+        public static List<Inscription> SectionInscription(int id_section, int id_person, String type)
+        {
+            var inscriptionList = new List<Inscription>();
+
+            var table = GeneralContext.Instance.ExecuteFunction("Inscription(@id_section, @id_person, @type)", id_section, id_person, type);
+            
+            for (var i = 0; i < table.Rows.Count; i++)
+            {
+                var result = Convert.ToBoolean(table.Rows[i][0]);
+
+                if(result == true){
+                    var iscription = new Inscription(id_section, id_person, type, "Usuario inscrito");
+                    inscriptionList.Add(iscription);
+                }else{
+                    var iscription = new Inscription(id_section, id_person, type, "Operacion fallida, el usuario ya se encuentra inscrito");
+                    inscriptionList.Add(iscription);
+                }
+
+            };
+
+            return inscriptionList;
+        }
+
         public bool SaveChanges()
         {
             return (_context.SaveChanges() >= 0);

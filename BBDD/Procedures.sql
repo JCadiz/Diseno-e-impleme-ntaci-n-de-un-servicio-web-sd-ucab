@@ -57,14 +57,40 @@ BEGIN
 END
 $BODY$ LANGUAGE plpgsql;
 
--- Delete Enrollment
-CREATE OR REPLACE FUNCTION DeleteEnrollment(id_enrollment INTEGER)  RETURNS INTEGER AS $$
-BEGIN
-    update enrollment
-    set status = 'disabled', deleted_date = CURRENT_TIMESTAMP
-    where enrollment.id = id_enrollment;
 
-    return id_school;
+-- Delete Inscription
+CREATE OR REPLACE FUNCTION Uninscription(id_section integer, id_person integer) 
+    RETURNS table (id integer, estatus varchar, tipo varchar, creado TIMESTAMP, eliminado TIMESTAMP, persona integer, seccion integer)
+    AS $BODY$
+BEGIN
+    update ENROLLMENT AS E
+    set status = 'disabled', deleted_date = CURRENT_TIMESTAMP
+    where E.fk_section = id_section AND fk_person = id_person;
+
+    RETURN QUERY
+        select * from ENROLLMENT E where E.fk_section = id_section AND fk_person = id_person;
+
+END
+$BODY$ LANGUAGE plpgsql;
+
+
+-- INSERT Inscription
+CREATE OR REPLACE FUNCTION Inscription(id_section integer, id_person integer, type2 varchar) 
+    RETURNS boolean AS $$
+    DECLARE 
+        result boolean;
+        cont integer;
+BEGIN
+
+    SELECT COUNT(*) INTO cont FROM ENROLLMENT AS E WHERE e.fk_person = id_person AND e.fk_section = id_section;
+
+    IF(cont = 0) THEN
+        INSERT INTO ENROLLMENT (status, type, fk_person, fk_section) VALUES ('enabled', type2, id_person, id_section);
+        result := TRUE;
+    ELSE
+        result := FALSE;
+    END IF;
+	RETURN result;
 END
 $$ LANGUAGE plpgsql;
 

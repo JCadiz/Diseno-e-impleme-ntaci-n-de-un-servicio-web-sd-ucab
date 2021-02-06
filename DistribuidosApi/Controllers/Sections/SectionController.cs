@@ -115,5 +115,19 @@ namespace DistribuidosApi.Controllers.Sections
             }
         }
 
+        //POST api/sections/1/inscription
+        [HttpPost("{id_section}/inscription", Name = "SectionInscription")]
+        public ActionResult<InscriptionDTO> SectionInscription(int id_section, InscriptionDTO ins)
+        {
+            try
+            {
+                return Ok(SqlSectionsRepository.SectionInscription(id_section, ins.id_person, ins.type));
+            }
+            catch (DatabaseException)
+            {
+                return StatusCode(500);
+            }
+        }
+
     }
 }
